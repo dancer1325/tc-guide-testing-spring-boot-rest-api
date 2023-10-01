@@ -20,6 +20,9 @@ import org.testcontainers.containers.PostgreSQLContainer;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class CustomerControllerTest {
 
+  /**
+   * Inject the random port on which the Spring Boot application starts
+   */
   @LocalServerPort
   private Integer port;
 
@@ -27,6 +30,9 @@ class CustomerControllerTest {
     "postgres:15-alpine"
   );
 
+  /**
+   * Postgres database runs on port 5432 inside the PostgreSQLContainer
+   */
   @BeforeAll
   static void beforeAll() {
     postgres.start();
@@ -37,6 +43,10 @@ class CustomerControllerTest {
     postgres.stop();
   }
 
+  /**
+   * Register the database connection properties dynamically, from the PostgreSQLContainer
+   * @param registry
+   */
   @DynamicPropertySource
   static void configureProperties(DynamicPropertyRegistry registry) {
     registry.add("spring.datasource.url", postgres::getJdbcUrl);
@@ -47,12 +57,19 @@ class CustomerControllerTest {
   @Autowired
   CustomerRepository customerRepository;
 
+  /**
+   * Check the random port in which spring boot context runs, deleting all existing customer entries
+   */
   @BeforeEach
   void setUp() {
+    //
     RestAssured.baseURI = "http://localhost:" + port;
     customerRepository.deleteAll();
   }
 
+  /**
+   * Get all the customers existing in the database, via the REST API endpoint
+   */
   @Test
   void shouldGetAllCustomers() {
     List<Customer> customers = List.of(
