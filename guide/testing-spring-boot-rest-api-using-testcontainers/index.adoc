@@ -19,7 +19,9 @@ In this guide you will learn how to
 
 * Create a Spring Boot application
 * Implement a REST API endpoint using Spring MVC, Spring Data Jpa and Postgres
-* Test REST API using Testcontainers and RestAssured.
+* Test REST API using
+    ** Testcontainers and
+    ** RestAssured.
 
 == Prerequisites
 * Java 17+
